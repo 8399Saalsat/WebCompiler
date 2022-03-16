@@ -2,12 +2,10 @@
 
 [![GitHub](https://img.shields.io/github/license/excubo-ag/WebCompiler)](https://github.com/8399Saalsat/WebCompiler/)
 
-`ExcuboLinux.WebCompiler` is a fork of [excubo-ag/webcompiler](https://github.com/excubo-ag/WebCompiler) that fixes sass compilation on linux.
+`ExcuboLinux.WebCompiler` is a fork of [excubo-ag/webcompiler](https://github.com/excubo-ag/WebCompiler) that fixes sass compilation on linux.  There is no nuget package published for this fork.
 
 This project is based on [madskristensen/WebCompiler](https://github.com/madskristensen/WebCompiler). However, the dependency to node and the node modules have been removed, to facilitate a pure dotnet core implementation.
 As a benefit, this implementation is cross-platform (x64 linux/win are tested, please help by testing other platforms!).
-
-:warning: A common mistake is to add the package `ExcuboLinux.WebCompiler` as a nuget package reference to a project (e.g. by installing it via the nuget package manager in Visual Studio). This does not work! Instead, one needs to install it as a `dotnet tool`. See the "Getting started" section further down on this page.
 
 ### Features
 
@@ -18,102 +16,6 @@ As a benefit, this implementation is cross-platform (x64 linux/win are tested, p
 - Minify the compiled output
 - Minification options for each language is customizable
 - Autoprefix for CSS
-
-### Changelog
-
-#### Changes in version 3.3.Y
-
-*Breaking Change / Warning*: This change removes the key of IgnoreFolders and IgnoreFiles per 3.2.Y and in favour of an "Ignore" key with support for [File Globbing support](https://docs.microsoft.com/en-us/dotnet/core/extensions/file-globbing).
-
-If no Ignore value is defined in the CompilerSettings.json then **/_*.* (files prefixed with _) will be ignored.
-If you wish to continue this behaviour and also ignore other patterns, ensure to also include this pattern.
-
-Simply add the following to CompilerSettings.json:
-
-```json
-  "CompilerSettings": {
-     "Ignore": [ "**/_*.*", "wwwroot/*.scss", "wwwroot/css/specific-file.scss", "wwwroot/_lib/**/*.scss", "bin/**/*", "obj/**/*" ],
-  }
-```
-
-#### Changes in version 3.2.Y
-
-Supports excluding certain files and folders (nb. Sub folders must be specified specifically if wanting to be ignored) when using recursive mode
-Simply add the following to CompilerSettings.json:
-
-```json
-  "CompilerSettings": {
-     "IgnoreFolders": ["./wwwroot/", "./bin/", "./obj/", "./wwwroot/sass/"],
-     "IgnoreFiles": ["./sass/_variables.scss"]
-  }
-```
-
-#### Changes in version 3.1.Y
-
-Support for netcoreapp3.1 and net5.0 were dropped. The nupkg file was getting outrageously large due to dependencies and duplication across the target frameworks.
-
-#### Changes in version 3.X.Y
-
-The underlying SASS compiler is changed from libsass to dart-sass. This is a necessary change, as libsass is discontinued. There are two breaking changes when working with the config json file:
-
-- `CompilerSettings.Sass.OutputStyle`: The valid values are now `Expanded` or `Compressed`. The former default value of `Nested` is now invalid.
-- The property `CompilerSettings.Sass.Precision` does not exist anymore.
-
-```json
-  "CompilerSettings": {
-    "Sass": {
-      "IndentType": "Space",
-      "IndentWidth": 2,
-      "OutputStyle": "Expanded", // was: "Nested"
-      //"Precision": 5, // Remove this
-      "RelativeUrls": true,
-      "LineFeed": "Lf",
-      "SourceMap": false
-    }
-  }
-```
-
-#### Changes in version 2.4.X
-
-Added support for .NET 5. You will most likely only notice that when using webcompiler in a docker context, but that's covered now as well!
-
-#### Changes in version 2.3.X
-
-There are now two more options:
-
-- `-o`/`--output-dir` helps to put files into a different folder. See `webcompiler -o --help` for more details.
-- `-p`/`--preserve` `disable` makes all temporary files disappear (note that this can increase compile time. The default is to keep all temporary files).
-
-#### Changes in version 2.1.X
-
-- Previously, running e.g. `webcompiler -r` without specifying a file and/or folder just returned without any message, warning or error. This is now an error. If the intention is to run in the working directory, use `webcompiler -r .`.
-- Now writes to `stderr` instead of `stdout` where appropriate.
-- Bug fixed: Sass files were not recompiled on change, if that change was to the sass file itself rather than one of its dependencies. Now it correctly recompiles for any change to the file itself or any of its dependencies.
-
-#### Breaking changes in version 2.0.X
-
-The command line interface has been rewritten from scratch to enable sensible defaults without the need to have a configuration file around.
-Starting with version 2.0.0, the old compilerconfig.json.defaults is incompatible. A new file can be created with `webcompiler --defaults` (optional).
-
-```
-Usage:
-  webcompiler file1 file2 ... [options]
-  webcompiler [options]
-
-Options:
-  -c|--config <conf.json>          Specify a configuration file for compilation.
-  -d|--defaults [conf.json]        Write a default configuration file (file name is webcompilerconfiguration.json, if none is specified).
-  -f|--files <files.conf>          Specify a list of files that should be compiled.
-  -h|--help                        Show command line help.
-  -m|--minify [disable/enable]     Enable/disable minification (default: enabled), ignored if configuration file is provided.
-  -o|--output-dir <path/to/dir>    Specify the output directory, ignored if configuration file is provided.
-  -p|--preserve [disable/enable]   Enable/disable whether to preserve intermediate files (default: enabled).
-  -r|--recursive                   Recursively search folders for compilable files (only if any of the provided arguments is a folder).
-  -z|--zip [disable/enable]        Enable/disable gzip (default: enabled), ignored if configuration file is provided.
-  -a|--autoprefix [disable/enable] Enable/disable autoprefixing (default: enabled), ignored if configuration file is provided.
-```
-
-Recommended default usage: `webcompiler -r wwwroot`.
 
 ### Roadmap
 
@@ -127,47 +29,6 @@ Please get in touch if you want to [contribute](#Contributing) to any of the fol
 - JSX
 - ES6
 - (Iced)CoffeeScript
-
-
-### Getting started
-
-#### Global
-
-##### 1. Call `webcompiler`
-
-```
-webcompiler -r wwwroot
-```
-
-#### Local
-
-It's also possible to use `ExcuboLinux.Webcompiler` as a local tool (ideal for CI environments)
-
-##### 1. Create a new tool manifest
-
-```
-dotnet new tool-manifest
-```
-
-##### 2. Add ExcuboLinux.Webcompiler
-
-```
-dotnet tool install ExcuboLinux.WebCompiler
-```
-
-##### 3. Restore
-
-```
-dotnet tool restore
-```
-
-##### 4. Usage
-
-```
-dotnet tool webcompiler -h
-```
-
-### Build integrations
 
 #### Command line / terminal
 
