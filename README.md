@@ -2,7 +2,7 @@
 
 [![GitHub](https://img.shields.io/github/license/excubo-ag/WebCompiler)](https://github.com/8399Saalsat/WebCompiler/)
 
-`ExcuboLinux.WebCompiler` is a dotnet global tool that compiles Scss files (other languages on the road map, see [how to contribute](#Contributing)).
+`ExcuboLinux.WebCompiler` is a fork of [excubo-ag/webcompiler](https://github.com/excubo-ag/WebCompiler) that fixes sass compilation on linux.
 
 This project is based on [madskristensen/WebCompiler](https://github.com/madskristensen/WebCompiler). However, the dependency to node and the node modules have been removed, to facilitate a pure dotnet core implementation.
 As a benefit, this implementation is cross-platform (x64 linux/win are tested, please help by testing other platforms!).
